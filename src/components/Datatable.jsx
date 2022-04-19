@@ -1,9 +1,10 @@
 import React,{useState,useEffect }from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
 
 //import {Modal, ModalBody, ModalHeader,ModalFooter, Form} from "reactstrap";
-import { Modal, Button,Form,FormControl } from "react-bootstrap";
+import { Modal, Button,Form} from "react-bootstrap";
 //import { Modal } from "bootstrap/dist/js/bootstrap.bundle.js";
 
 
@@ -17,11 +18,18 @@ const paginacionOpciones={
     selectAllRowsItem: true,
     selectAllRowsText:'Todos'
 }
-
+ //Funcion para Buscaar Items
+const SearchIt = ({ onChange, value }) => (
+  <input
+    placeholder="Buscar"
+    onChange={(e) => onChange(e)}
+    value={value.toLowerCase()}
+  />
+);
 function Datatable() {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    
+    const handleClose = () => setShow(false) & setShowNuevo(false);
+    const [showNuevo,setShowNuevo] = useState(false);
     const [clienteSeleccionado, setClienteSeleccionado]=useState({
         razon_social:"",
         documento:"",
@@ -50,6 +58,8 @@ function Datatable() {
         seleccionarCliente(row)
 		console.log('clicked');
 	};
+
+
     const columns = [
         {
           name: "Razon Social",
@@ -88,12 +98,12 @@ function Datatable() {
         },
         {
           name: "Acciones",
-          cell: (data) => < button className="btn btn-primary" onClick={()=>handleButtonClick(data)} >Editar Cliente</button>,
+          cell: (row) => < button className="btn btn-primary" onClick={()=>handleButtonClick(row)} >Editar Cliente</button>,
           allowOverFlow:true,
 
         }
       ];
-    //////--------------------------------------------Peticion Get
+//////--------------------------------------------Peticion Get
     const [data, setData] = useState([]);
     const url = "http://localhost:3001/clientes/"
     useEffect(()=>{
@@ -115,16 +125,72 @@ const peticionPost=async()=>{
         handleClose();
     })
 }
-//--------------------------------------------------
+//---------------------------------------------------Peticion Put.
+const peticionPut = async()=>{
+  await axios.put(url+"/"+clienteSeleccionado.id,clienteSeleccionado)
+  .then(response=>{
+    var dataNueva = data;
+    dataNueva.map(celda=>{
+      if(celda.id===clienteSeleccionado.id ){
+        console.log(celda.id);
+          celda.razon_social=clienteSeleccionado.razon_social;
+          celda.documento=clienteSeleccionado.documento;
+          celda.domicilio=clienteSeleccionado.domicilio;
+          celda.telefono=clienteSeleccionado.telefono;
+          celda.categoria_iva=clienteSeleccionado.categoria_iva;
+          celda.cuit=clienteSeleccionado.cuit;
+          setData(dataNueva);
+          handleClose();
+      }
+    })
+  })
+}
+//-------------------------------------------------peticion Delete.
+const peticionDelete=async()=>{
+  await axios.delete(url+'/'+clienteSeleccionado.id)
+  .then(response=>{
+    setData(data.filter(celda=>celda.id!==clienteSeleccionado.id))
+  })
+}
+const eliminarCliente =()=>{
+  Swal.fire({
+    title: 'Atencion!',
+    text: `Estás seguro de eliminar ${clienteSeleccionado.razon_social}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    cancelButtonText:'Cancelar',
+    confirmButtonText: 'Aceptar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      peticionDelete();
+      Swal.fire(
+        'Cliente Borrado!!',
+        'Cliente Borrado Con exito!',
+        'success'
+      )
+    }
+  })
+  handleClose();
+}
+//-------------------------------------------------- Funcion buscar.
+const [filtro, setFiltro] = useState('');
+  const filteredData = data.filter(item =>
+    item.razon_social.toLowerCase().includes(filtro)
+  );
+//----------------------------------------------
+//-------
     const handleShow = () => {
         setShow(true)
-
-    }
-
-        const action = <><button type="button" class="btn btn-success"onClick={handleShow}>
+}
+const handleShowNuevo = () => {
+   setShowNuevo(true)
+}
+  const action = <><button type="button" class="btn btn-success"onClick={handleShowNuevo}>
             Nuevo Cliente
-        </button></>;
-    
+  </button></>;
+
     return (
       <>
       <Modal show={show} onHide={handleClose}>
@@ -195,9 +261,85 @@ const peticionPost=async()=>{
 
         </Modal.Body>
         <Modal.Footer>
-        <Button variant="danger" >
+        <Button variant="danger" onClick={()=>eliminarCliente()}>
             Eliminar
           </Button>
+          <Button variant="success" onClick={()=>peticionPut()} >
+            Guardar
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancelar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showNuevo} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> Nuevo Cliente</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="razon_social"
+                        placeholder="Razon Social"
+                        value={clienteSeleccionado.razon_social}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="documento"
+                        placeholder="Documento"
+                        value={clienteSeleccionado.documento}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="domicilio"
+                        placeholder="Domicilio"
+                        value={clienteSeleccionado.domicilio}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="telefono"
+                        placeholder="Telefono"
+                        value={clienteSeleccionado.telefono}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="categoria_iva"
+                        placeholder="Categoria IVA"
+                        value={clienteSeleccionado.categoria_iva}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="cuit"
+                        placeholder="Cuit"
+                        value={clienteSeleccionado.cuit}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+
+        </Modal.Body>
+        <Modal.Footer>
           <Button variant="success" onClick={()=>peticionPost()} >
             Guardar
           </Button>
@@ -206,12 +348,11 @@ const peticionPost=async()=>{
           </Button>
         </Modal.Footer>
       </Modal>
-      
       <div className="table-responsive">
          <DataTable
           title="Lista de los Clientes Registrados"
           columns={columns}
-          data={data}
+          data={filteredData}
           actions={action}
           defaultSortField="razon_social"
           defaultSortAsc={false}
@@ -220,6 +361,13 @@ const peticionPost=async()=>{
           fixedHeader
           fixedHeaderScrollHeight="420px"
           highlightOnHover
+          subHeader
+          subHeaderComponent={
+            <SearchIt
+              onChange={e => setFiltro(e.target.value)}
+              value={filtro}
+            />
+          }
         />
       </div>
       </>
