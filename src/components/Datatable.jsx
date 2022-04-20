@@ -46,6 +46,7 @@ function Datatable() {
         handleShow();
 
     }
+    ///---
     const handleChange=e=>{
         const {name, value}=e.target;
         setClienteSeleccionado(prevState=>({
@@ -185,7 +186,8 @@ const [filtro, setFiltro] = useState('');
         setShow(true)
 }
 const handleShowNuevo = () => {
-   setShowNuevo(true)
+  setClienteSeleccionado({}); 
+  setShowNuevo(true)
 }
   const action = <><button type="button" class="btn btn-success"onClick={handleShowNuevo}>
             Nuevo Cliente
@@ -224,6 +226,16 @@ const handleShowNuevo = () => {
                         name="domicilio"
                         placeholder="Domicilio"
                         value={clienteSeleccionado.domicilio}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="localidad"
+                        placeholder="Localidad"
+                        value={clienteSeleccionado.localidad}
                         onChange={handleChange}
                         required
                     />
@@ -272,6 +284,8 @@ const handleShowNuevo = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
       <Modal show={showNuevo} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title> Nuevo Cliente</Modal.Title>
@@ -303,6 +317,16 @@ const handleShowNuevo = () => {
                         name="domicilio"
                         placeholder="Domicilio"
                         value={clienteSeleccionado.domicilio}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Control 
+                        type="text"
+                        name="localidad"
+                        placeholder="Localidad"
+                        value={clienteSeleccionado.localidad}
                         onChange={handleChange}
                         required
                     />
