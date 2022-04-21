@@ -200,7 +200,8 @@ const handleShowNuevo = () => {
           <Modal.Title>Actualizar Datos del Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form.Group className="mb-3">
+         <Form onSubmit={()=>peticionPut()} >
+           <Form.Group className="mb-3">
                     <Form.Control 
                         type="text"
                         name="razon_social"
@@ -251,14 +252,13 @@ const handleShowNuevo = () => {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Control 
-                        type="text"
-                        name="categoria_iva"
-                        placeholder="Categoria IVA"
-                        value={clienteSeleccionado.categoria_iva}
-                        onChange={handleChange}
-                        required
-                    />
+                     <Form.Select value={clienteSeleccionado.categoria_iva} >
+                      <option >Seleccione Categoria</option>
+                      <option value="1"> (1) Régimen Simplificado (RS) - Monotributista</option>
+                      <option value="2">(2) Responsable Inscripto (RI)</option>
+                      <option value="3"> (3) Exento</option>
+                      <option value="4"> (4) Consumidor Final</option>
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control 
@@ -270,19 +270,20 @@ const handleShowNuevo = () => {
                         required
                     />
                 </Form.Group>
-
-        </Modal.Body>
-        <Modal.Footer>
+                <Modal.Footer>
         <Button variant="danger" onClick={()=>eliminarCliente()}>
             Eliminar
           </Button>
-          <Button variant="success" onClick={()=>peticionPut()} >
+          <Button variant="success" type="submit" >
             Guardar
           </Button>
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
         </Modal.Footer>
+                </Form> 
+        </Modal.Body>
+       
       </Modal>
 
 
@@ -291,6 +292,7 @@ const handleShowNuevo = () => {
           <Modal.Title> Nuevo Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <Form onSubmit={()=>peticionPost()}>
         <Form.Group className="mb-3">
                     <Form.Control 
                         type="text"
@@ -303,7 +305,7 @@ const handleShowNuevo = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control 
-                        type="text"
+                        type="number"
                         name="documento"
                         placeholder="Documento"
                         value={clienteSeleccionado.documento}
@@ -333,7 +335,7 @@ const handleShowNuevo = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control 
-                        type="text"
+                        type="number"
                         name="telefono"
                         placeholder="Telefono"
                         value={clienteSeleccionado.telefono}
@@ -342,18 +344,18 @@ const handleShowNuevo = () => {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Control 
-                        type="text"
-                        name="categoria_iva"
-                        placeholder="Categoria IVA"
-                        value={clienteSeleccionado.categoria_iva}
-                        onChange={handleChange}
-                        required
-                    />
+                     <Form.Select value={clienteSeleccionado.categoria_iva} onChange={handleChange}>
+                      <option >Seleccione Categoria</option>
+                      <option value="1"> (1) Régimen Simplificado (RS) - Monotributista</option>
+                      <option value="2">(2) Responsable Inscripto (RI)</option>
+                      <option value="3"> (3) Exento</option>
+                      <option value="4"> (4) Consumidor Final</option>
+                      
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Control 
-                        type="text"
+                        type="number"
                         name="cuit"
                         placeholder="Cuit"
                         value={clienteSeleccionado.cuit}
@@ -361,16 +363,18 @@ const handleShowNuevo = () => {
                         required
                     />
                 </Form.Group>
-
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={()=>peticionPost()} >
+                <Modal.Footer>
+          <Button variant="success" type="submit" >
             Guardar
           </Button>
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
         </Modal.Footer>
+
+        </Form>
+        </Modal.Body>
+        
       </Modal>
       <div className="table-responsive">
          <DataTable
@@ -386,6 +390,7 @@ const handleShowNuevo = () => {
           fixedHeaderScrollHeight="420px"
           highlightOnHover
           subHeader
+          subHeaderAlign="left"
           subHeaderComponent={
             <SearchIt
               onChange={e => setFiltro(e.target.value)}
