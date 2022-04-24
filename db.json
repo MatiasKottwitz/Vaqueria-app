@@ -10,13 +10,14 @@
       "localidad": "PARANA",
       "postal": "3100",
       "telefono": "425282",
-      "categoria_iva": 2,
+      "categoria_iva": "2",
       "cuit": "20145072809",
       "provincia": 2,
       "categoria_ingresos_brutos": 2,
       "inscripcion_ingresos_brutos": "20145072809",
       "adicionales": 0,
-      "fecha_y_hora_proceso": 1605458994643
+      "fecha_y_hora_proceso": 1605458994643,
+      "": "3"
     },
     {
       "sucursal": 2,
@@ -2707,12 +2708,12 @@
       "razon_social": "sdasd",
       "tipo_documento": "asdasd",
       "documento": "ddd",
-      "domicilio": "",
-      "localidad": "",
+      "domicilio": "Locucho 43",
+      "localidad": "Rubina",
       "postal": "",
-      "telefono": null,
-      "categoria_iva": null,
-      "cuit": "",
+      "telefono": "123453",
+      "categoria_iva": "1",
+      "cuit": "36826957",
       "provincia": null,
       "categoria_ingresos_brutos": null,
       "inscripcion_ingresos_brutos": null,
@@ -2766,6 +2767,36 @@
       "telefono": "545454545",
       "categoria_iva": "5",
       "id": 1647697489238
+    },
+    {
+      "razon_social": "Fulgencio isidoro",
+      "documento": "12479269",
+      "domicilio": "locucho 1740",
+      "telefono": "456395",
+      "categoria_iva": "2",
+      "cuit": "123456789",
+      "id": 1647697489239
+    },
+    {
+      "razon_social": "Florencia Buera",
+      "documento": "3682637",
+      "domicilio": "itamebte",
+      "localidad": "posadas",
+      "telefono": "456977",
+      "": "2",
+      "cuit": "36826955",
+      "id": 1647697489241,
+      "categoria_iva": "2"
+    },
+    {
+      "razon_social": "Matias Kottwitz",
+      "documento": "34447709",
+      "domicilio": "Junin 2064",
+      "localidad": "Posadas",
+      "telefono": "456789",
+      "categoria_iva": "2",
+      "cuit": "36826957",
+      "id": 1647697489242
     }
   ]
 }

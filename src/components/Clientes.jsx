@@ -1,23 +1,11 @@
-import React,{useEffect , useState} from 'react'
-import axios from 'axios';
-import Tabla from './Tabla';
-import Show from '../CRUD/Show';
+import React from 'react'
+import Datatable from '../components/Datatable';
 
-const URL="http://localhost:3001/clientes";
+
 
 export const Clientes = () => {
-    /*
-    const [data,setData]=useState();
-    
-    const peticionGet=async()=>{
-       await axios.get(URL).then(response=>{
-            console.log(response.data);
-        })
-    }
-    useEffect(async()=>{
-        await peticionGet();
-    }[]);*/
+   
     return (
-    <Tabla/>
+    <Datatable/>
   )
 }

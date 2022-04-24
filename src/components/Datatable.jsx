@@ -2,23 +2,10 @@ import React,{useState,useEffect }from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
-
-//import {Modal, ModalBody, ModalHeader,ModalFooter, Form} from "reactstrap";
 import { Modal, Button,Form} from "react-bootstrap";
-//import { Modal } from "bootstrap/dist/js/bootstrap.bundle.js";
-
-
-//seccion para las Columnas..
-
-
-//Funcion para las opciones de paginacion..
-const paginacionOpciones={
-    rowsPerPageText: 'Filas por Pagina',
-    rangeSeparatorText: 'de',
-    selectAllRowsItem: true,
-    selectAllRowsText:'Todos'
-}
- //Funcion para Buscaar Items
+import "bootstrap/dist/css/bootstrap.css";
+import { Link, NavLink } from "react-router-dom";
+//-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
   <input
     placeholder="Buscar"
@@ -30,23 +17,32 @@ function Datatable() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false) & setShowNuevo(false);
     const [showNuevo,setShowNuevo] = useState(false);
+    const [filtro, setFiltro] = useState('');
     const [clienteSeleccionado, setClienteSeleccionado]=useState({
-        razon_social:"",
-        documento:"",
-        domicilio:"",
-        telefono:"",
-        categoria_iva:"",
-        cuit:""
-        
+      razon_social:"",
+      documento:"",
+      domicilio:"",
+      telefono:"",
+      categoria_iva:"",
+      cuit:""
+      
     })
-    const [celda, setCelda] = useState();
+    
+    const paginacionOpciones={
+      rowsPerPageText: 'Filas por Pagina',
+      rangeSeparatorText: 'de',
+      selectAllRowsItem: true,
+      selectAllRowsText:'Todos'
+    };
+    
+    
     const seleccionarCliente=(celda)=>{
-        console.log(celda);
-        setClienteSeleccionado(celda);
-        handleShow();
-
+      console.log(celda);
+      setClienteSeleccionado(celda);
+      handleShow();
+    
     }
-    ///---
+    //Funcion Utilizada para capurar datos de los input.
     const handleChange=e=>{
         const {name, value}=e.target;
         setClienteSeleccionado(prevState=>({
@@ -59,8 +55,14 @@ function Datatable() {
         seleccionarCliente(row)
 		console.log('clicked');
 	};
-
-
+    const handleShow = () => {
+      setShow(true)
+    };
+    const handleShowNuevo = () => {
+      setClienteSeleccionado({}); 
+      setShowNuevo(true)
+    };
+    
     const columns = [
         {
           name: "Razon Social",
@@ -99,7 +101,7 @@ function Datatable() {
         },
         {
           name: "Acciones",
-          cell: (row) => < button className="btn btn-primary" onClick={()=>handleButtonClick(row)} >Editar Cliente</button>,
+          cell: (row) => < button className="btn btn-warning" onClick={()=>handleButtonClick(row)} >Editar Cliente</button>,
           allowOverFlow:true,
 
         }
@@ -126,10 +128,27 @@ const peticionPost=async()=>{
         handleClose();
     })
 }
+const cargarCliente =()=>{
+  Swal.fire({
+    title: '¿Esta seguro de guardar los datos?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Guardar',
+    denyButtonText: `No Guardar`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      peticionPost();
+      Swal.fire('Guardado!', '', 'success')
+    } else if (result.isDenied) {
+      Swal.fire('Cambios No Guardados...', '', 'info')
+    }
+  })
+}
 //---------------------------------------------------Peticion Put.
 const peticionPut = async()=>{
   await axios.put(url+"/"+clienteSeleccionado.id,clienteSeleccionado)
-  .then(response=>{
+  .then(()=>{
     var dataNueva = data;
     dataNueva.map(celda=>{
       if(celda.id===clienteSeleccionado.id ){
@@ -141,6 +160,13 @@ const peticionPut = async()=>{
           celda.categoria_iva=clienteSeleccionado.categoria_iva;
           celda.cuit=clienteSeleccionado.cuit;
           setData(dataNueva);
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Cliente Actualizado Correctamente!',
+            showConfirmButton: false,
+            timer: 1500
+          })
           handleClose();
       }
     })
@@ -149,7 +175,7 @@ const peticionPut = async()=>{
 //-------------------------------------------------peticion Delete.
 const peticionDelete=async()=>{
   await axios.delete(url+'/'+clienteSeleccionado.id)
-  .then(response=>{
+  .then(()=>{
     setData(data.filter(celda=>celda.id!==clienteSeleccionado.id))
   })
 }
@@ -175,32 +201,28 @@ const eliminarCliente =()=>{
   })
   handleClose();
 }
-//-------------------------------------------------- Funcion buscar.
-const [filtro, setFiltro] = useState('');
+
   const filteredData = data.filter(item =>
     item.razon_social.toLowerCase().includes(filtro)
   );
 //----------------------------------------------
 //-------
-    const handleShow = () => {
-        setShow(true)
-}
-const handleShowNuevo = () => {
-  setClienteSeleccionado({}); 
-  setShowNuevo(true)
-}
-  const action = <><button type="button" class="btn btn-success"onClick={handleShowNuevo}>
+
+  const action = <>
+        <button type="button" class="btn btn-success"onClick={handleShowNuevo}>
             Nuevo Cliente
-  </button></>;
+        </button>
+        <Link to='/NuevoCliente' class="btn btn-success">Nuevo Cliente</Link>
+      </>;
 
     return (
       <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show}  onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Actualizar Datos del Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-         <Form onSubmit={()=>peticionPut()} >
+         <Form>
            <Form.Group className="mb-3">
                     <Form.Control 
                         type="text"
@@ -252,7 +274,7 @@ const handleShowNuevo = () => {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                     <Form.Select value={clienteSeleccionado.categoria_iva} >
+                     <Form.Select name="categoria_iva" value={clienteSeleccionado.categoria_iva} onChange={handleChange}>
                       <option >Seleccione Categoria</option>
                       <option value="1"> (1) Régimen Simplificado (RS) - Monotributista</option>
                       <option value="2">(2) Responsable Inscripto (RI)</option>
@@ -274,7 +296,7 @@ const handleShowNuevo = () => {
         <Button variant="danger" onClick={()=>eliminarCliente()}>
             Eliminar
           </Button>
-          <Button variant="success" type="submit" >
+          <Button variant="success" onClick={()=>peticionPut()} >
             Guardar
           </Button>
           <Button variant="secondary" onClick={handleClose}>
@@ -287,12 +309,12 @@ const handleShowNuevo = () => {
       </Modal>
 
 
-      <Modal show={showNuevo} onHide={handleClose}>
+      <Modal show={showNuevo} fullscreen={true} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title> Nuevo Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form onSubmit={()=>peticionPost()}>
+        <Form>
         <Form.Group className="mb-3">
                     <Form.Control 
                         type="text"
@@ -344,7 +366,7 @@ const handleShowNuevo = () => {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                     <Form.Select value={clienteSeleccionado.categoria_iva} onChange={handleChange}>
+                     <Form.Select name="categoria_iva" value={clienteSeleccionado.categoria_iva} onChange={handleChange}>
                       <option >Seleccione Categoria</option>
                       <option value="1"> (1) Régimen Simplificado (RS) - Monotributista</option>
                       <option value="2">(2) Responsable Inscripto (RI)</option>
@@ -364,7 +386,7 @@ const handleShowNuevo = () => {
                     />
                 </Form.Group>
                 <Modal.Footer>
-          <Button variant="success" type="submit" >
+          <Button variant="success" onClick={()=>cargarCliente()}>
             Guardar
           </Button>
           <Button variant="secondary" onClick={handleClose}>
@@ -387,7 +409,7 @@ const handleShowNuevo = () => {
           pagination
           paginationComponentOptions={paginacionOpciones}
           fixedHeader
-          fixedHeaderScrollHeight="420px"
+          fixedHeaderScrollHeight="550px"
           highlightOnHover
           subHeader
           subHeaderAlign="left"
