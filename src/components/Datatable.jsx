@@ -4,29 +4,33 @@ import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import { Modal, Button, Form, Col, Row,} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 //-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
-  <input
-    placeholder="Buscar"
+  <>
+    <div className="input-group input-group-xl w-50">
+    <span className="input-group-text">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+      </svg>
+    </span>
+    <input className="form-control"
+    placeholder="Buscar Clientes Por Razon Social"
     onChange={(e) => onChange(e)}
     value={value.toLowerCase()}
   />
+    </div>
+  </>
+  
+  
 );
 function Datatable() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false) & setShowNuevo(false);
     const [showNuevo,setShowNuevo] = useState(false);
     const [filtro, setFiltro] = useState('');
-    const [clienteSeleccionado, setClienteSeleccionado]=useState({
-      razon_social:"",
-      documento:"",
-      domicilio:"",
-      telefono:"",
-      categoria_iva:"",
-      cuit:""
-      
-    })
+    const [clienteSeleccionado, setClienteSeleccionado]=useState({});
     
     const paginacionOpciones={
       rowsPerPageText: 'Filas por Pagina',
@@ -67,42 +71,81 @@ function Datatable() {
         {
           name: "Razon Social",
           selector: (row) => row.razon_social,
-          sortable: true
+          sortable: true,
+          width:"200px",
+          wrap:true
         },
+        
         {
           name: "Documento",
           selector: (row) => row.documento,
-          sortable: true
+          sortable: true,
+          width:"120px"
+        },
+        {
+          name: "Tipo de Documento",
+          selector: (row) => row.tipo_documento,
+          sortable: true,
+          width:"100px"
         },
         {
           name: "Domicilio",
           selector: (row) => row.domicilio,
-          sortable: true
+          sortable: true,
+          width:"180px",
+          center:true
         },
         {
           name: "Localidad",
           selector: (row) => row.localidad,
-          sortable: true
+          sortable: true,
+          width:"120px",
+          center:true
+        },
+        {
+          name: "Cod Postal",
+          selector: (row) => row.postal,
+          sortable: true,
+          width:"150px",
+          center:true
         },
         {
           name: "Telefono",
           selector: (row) => row.telefono,
-          sortable: true
+          sortable: true,
+          width:"150px",
+          center:true
         },
         {
-          name: "Categoria IVA",
+          name: "Cat. IVA",
           selector: (row) => row.categoria_iva,
-          sortable: true
+          sortable: true,
+          width:"95px",
+          center:true
         },
         {
           name: "Cuit",
           selector: (row) => row.cuit,
+          sortable: true,
+          width:"120px",
+          center:true
+        },
+        /*{
+          name: "Provincia",
+          selector: (row) => row.provincia,
           sortable: true
         },
         {
+          name: "Cat Ingresos Brutos",
+          selector: (row) => row.categoria_ingresos_brutos,
+          sortable: true
+        },*/
+        {
           name: "Acciones",
-          cell: (row) => < button className="btn btn-warning" onClick={()=>handleButtonClick(row)} >Editar Cliente</button>,
+          cell: (row) => < button className="btn btn-warning" onClick={()=>handleButtonClick(row)} ><i class="bi bi-pencil-square"></i></button>,
           allowOverFlow:true,
+          width:"100px",
+          center:true
 
         }
       ];
@@ -121,8 +164,8 @@ function Datatable() {
         })
     }
 /////-------------------------------------------------Peticion Post
-const peticionPost=async()=>{
-    await axios.post(url,clienteSeleccionado)
+const peticionPost=async()=>{  
+  await axios.post(url,clienteSeleccionado)
     .then(response=>{
         setData(data.concat(response.data));
         handleClose();
@@ -146,20 +189,15 @@ const cargarCliente =()=>{
   })
 }
 //---------------------------------------------------Peticion Put.
-const peticionPut = async()=>{
+const peticionPut = async(e)=>{
+  e.preventDefault();
   await axios.put(url+"/"+clienteSeleccionado.id,clienteSeleccionado)
   .then(()=>{
     var dataNueva = data;
     dataNueva.map(celda=>{
       if(celda.id===clienteSeleccionado.id ){
         console.log(celda.id);
-          celda.razon_social=clienteSeleccionado.razon_social;
-          celda.documento=clienteSeleccionado.documento;
-          celda.domicilio=clienteSeleccionado.domicilio;
-          celda.telefono=clienteSeleccionado.telefono;
-          celda.categoria_iva=clienteSeleccionado.categoria_iva;
-          celda.cuit=clienteSeleccionado.cuit;
-          setData(dataNueva);
+        setData(dataNueva);
           Swal.fire({
             position: 'center',
             icon: 'success',
@@ -205,14 +243,13 @@ const eliminarCliente =()=>{
   const filteredData = data.filter(item =>
     item.razon_social.toLowerCase().includes(filtro)
   );
-//----------------------------------------------
-//-------
 
+//<Link to='/NuevoCliente' class="btn btn-success">Nuevo Cliente</Link>
   const action = <>
         <button type="button" class="btn btn-success"onClick={handleShowNuevo}>
             Nuevo Cliente
         </button>
-        <Link to='/NuevoCliente' class="btn btn-success">Nuevo Cliente</Link>
+        
       </>;
 
     return (
@@ -222,7 +259,7 @@ const eliminarCliente =()=>{
           <Modal.Title>Actualizar Datos del Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-         <Form>
+         <Form onSubmit={peticionPut}>
            <Form.Group className="mb-3">
                     <Form.Control 
                         type="text"
@@ -296,7 +333,7 @@ const eliminarCliente =()=>{
         <Button variant="danger" onClick={()=>eliminarCliente()}>
             Eliminar
           </Button>
-          <Button variant="success" onClick={()=>peticionPut()} >
+          <Button variant="success" type="submit">
             Guardar
           </Button>
           <Button variant="secondary" onClick={handleClose}>
@@ -309,12 +346,12 @@ const eliminarCliente =()=>{
       </Modal>
 
 
-      <Modal show={showNuevo} size='lg'  onHide={handleClose}>
+      <Modal show={showNuevo} size='xl'  onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title> Nuevo Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form >
+        <Form>
           <Row>
               <Form.Group className="mb-3" as={Col} lg='3'>
               <Form.Label>Razon Social</Form.Label>
