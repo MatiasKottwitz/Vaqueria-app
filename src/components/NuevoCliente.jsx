@@ -141,3 +141,4 @@ export const NuevoCliente = () => {
       </Form>
   )
 }
+export default NuevoCliente;

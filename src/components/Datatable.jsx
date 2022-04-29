@@ -5,7 +5,8 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form, Col, Row,} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Link, NavLink } from "react-router-dom";
+import { Link, Navigate, NavLink } from "react-router-dom";
+import NuevoCliente from './NuevoCliente'
 //-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
   <>
@@ -244,6 +245,12 @@ const eliminarCliente =()=>{
     item.razon_social.toLowerCase().includes(filtro)
   );
 
+  
+  const onRowClicked = (row, event) => { 
+    
+    console.log("fila presionada:"+ row.razon_social);
+    <Navigate to="/NuevoCliente" replace={true}/>
+  };
 //<Link to='/NuevoCliente' class="btn btn-success">Nuevo Cliente</Link>
   const action = <>
         <button type="button" class="btn btn-success" onClick={handleShowNuevo}>
@@ -528,6 +535,7 @@ const eliminarCliente =()=>{
               value={filtro}
             />
           }
+          onRowClicked={onRowClicked}
         />
       </div>
       </>
