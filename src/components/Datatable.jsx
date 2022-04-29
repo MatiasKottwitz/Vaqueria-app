@@ -246,7 +246,8 @@ const eliminarCliente =()=>{
 
 //<Link to='/NuevoCliente' class="btn btn-success">Nuevo Cliente</Link>
   const action = <>
-        <button type="button" class="btn btn-success"onClick={handleShowNuevo}>
+        <button type="button" class="btn btn-success" onClick={handleShowNuevo}>
+        <i class="bi bi-plus-lg"></i>
             Nuevo Cliente
         </button>
         
