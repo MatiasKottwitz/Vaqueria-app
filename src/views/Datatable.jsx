@@ -136,7 +136,7 @@ function Datatable({data}) {
         },*/
         {
           name: "Acciones",
-          cell: (row) => <ModalCliente tipoBoton={"Editar"} />,
+          cell: (row) => <ModalCliente onClick={()=>HandleButtonClick(row)} tipoBoton={"Editar"} />,
           allowOverFlow:true,
           width:"100px",
           center:true
