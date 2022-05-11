@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
-import {Boton} from "../components/Buttons/Boton";
+import { EstadoContext } from "../context/Context";
 //-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
   <>
@@ -30,7 +30,7 @@ const SearchIt = ({ onChange, value }) => (
 function Datatable({data}) {
     
     const [filtro, setFiltro] = useState('');
-    const [datoSeleccionado, setdatoSeleccionado]=useState({});
+    const [datoSeleccionado, setDatoSeleccionado]=useState({});
     const [estadoEditar, setEstadoEditar]= useState(false);
     const [estadoNuevo, setEstadoNuevo]= useState(false);  
     
@@ -43,13 +43,13 @@ function Datatable({data}) {
     
     
     const seleccionarDato=(celda)=>{
-      setdatoSeleccionado(celda);
+      setDatoSeleccionado(celda);
     
     }
     //Funcion Utilizada para capurar datos de los input.
     const handleChange=e=>{
         const {name, value}=e.target;
-        setdatoSeleccionado(prevState=>({
+        setDatoSeleccionado(prevState=>({
             ...prevState,
             [name]:value
         }));
@@ -57,8 +57,9 @@ function Datatable({data}) {
     }
     
   
-    const abrirModalNuevo=()=>{
-      setEstadoNuevo(true);
+    const resetEstados=()=>{
+      setEstadoNuevo(false);
+      setEstadoEditar(false);
     }
 
     const HandleButtonClick = (row) => {
@@ -165,8 +166,8 @@ function Datatable({data}) {
 
     return (
       <>
-      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"}/>}
-      {estadoNuevo === true && <ModalCliente tipoBoton={"Nuevo"}/>}
+      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"} resetEstados={resetEstados}/>}
+      {estadoNuevo === true && <ModalCliente tipoBoton={"Nuevo"} resetEstados={resetEstados}/>}
       <div className="table-responsive">
         <Container fluid={'auto'}>
         <DataTable
@@ -182,6 +183,7 @@ function Datatable({data}) {
           fixedHeaderScrollHeight="650px"
           highlightOnHover
           subHeader
+          direction="auto"
           subHeaderAlign="left"
           subHeaderComponent={
             <SearchIt

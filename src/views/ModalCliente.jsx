@@ -1,9 +1,12 @@
 import React,{useState,useEffect }from "react";
 import { Modal, Button, Form, Col, Row, Container,} from "react-bootstrap";
 
-const ModalCliente = ({tipoBoton}) => { 
+const ModalCliente = ({tipoBoton, resetEstados}) => { 
   const [show, setShow] = useState(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () =>{
+    setShow(false);
+    resetEstados();
+  } ;
   console.log(tipoBoton); 
     const handleShow = () => {
         setShow(true)
