@@ -1,6 +1,5 @@
 import React from 'react'
-import Datatable from '../components/Datatable';
-import CrudApi from '../services/CrudApi';
+import CrudApi from "../../services/CrudApi";
 
 
 

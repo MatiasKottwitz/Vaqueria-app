@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
+import {Boton} from "../components/Buttons/Boton";
 //-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
   <>
@@ -29,7 +30,9 @@ const SearchIt = ({ onChange, value }) => (
 function Datatable({data}) {
     
     const [filtro, setFiltro] = useState('');
-    const [clienteSeleccionado, setClienteSeleccionado]=useState({});
+    const [datoSeleccionado, setdatoSeleccionado]=useState({});
+    const [estadoEditar, setEstadoEditar]= useState(false);
+    const [estadoNuevo, setEstadoNuevo]= useState(false);  
     
     const paginacionOpciones={
       rowsPerPageText: 'Filas por Pagina',
@@ -39,27 +42,32 @@ function Datatable({data}) {
     };
     
     
-    const seleccionarCliente=(celda)=>{
-      console.log("Seleccionar Cliente: La celda es:"+celda);
-      setClienteSeleccionado(celda);
+    const seleccionarDato=(celda)=>{
+      setdatoSeleccionado(celda);
     
     }
     //Funcion Utilizada para capurar datos de los input.
     const handleChange=e=>{
         const {name, value}=e.target;
-        setClienteSeleccionado(prevState=>({
+        setdatoSeleccionado(prevState=>({
             ...prevState,
             [name]:value
         }));
-        console.log(clienteSeleccionado);
+        console.log(datoSeleccionado);
     }
+    
+  
+    const abrirModalNuevo=()=>{
+      setEstadoNuevo(true);
+    }
+
     const HandleButtonClick = (row) => {
-        seleccionarCliente(row);
-        console.log("Handle Button: La celda es:"+row);
+        seleccionarDato(row);
+        console.log(row);
+        setEstadoEditar(true);
         
         //llamar al modal con los datos de la fila seleccionada..
-       
-	}
+    }
     
     const columns = [
         {
@@ -136,7 +144,7 @@ function Datatable({data}) {
         },*/
         {
           name: "Acciones",
-          cell: (row) => <ModalCliente onClick={()=>HandleButtonClick(row)} tipoBoton={"Editar"} />,
+          cell: (row) => <button className="btn btn-warning" onClick={()=>HandleButtonClick(row)}> <i class="bi bi-pencil-square"></i></button>,
           allowOverFlow:true,
           width:"100px",
           center:true
@@ -148,13 +156,19 @@ function Datatable({data}) {
   const filteredData = data.filter(item =>
     item.razon_social.toLowerCase().includes(filtro)
   );
-  const action = <ModalCliente tipoBoton={"Nuevo"}/>;
+  const action = <>
+                <button type="button" class="btn btn-success" onClick={()=>setEstadoNuevo(true)}>
+                    <i class="bi bi-plus-lg"></i>Nuevo Cliente
+                </button>
+  
+                </>;
 
     return (
       <>
-      
+      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"}/>}
+      {estadoNuevo === true && <ModalCliente tipoBoton={"Nuevo"}/>}
       <div className="table-responsive">
-        <Container fluid={'xxl'}>
+        <Container fluid={'auto'}>
         <DataTable
           title="Lista de los Clientes Registrados"
           columns={columns}
@@ -165,7 +179,7 @@ function Datatable({data}) {
           pagination
           paginationComponentOptions={paginacionOpciones}
           fixedHeader
-          fixedHeaderScrollHeight="550px"
+          fixedHeaderScrollHeight="650px"
           highlightOnHover
           subHeader
           subHeaderAlign="left"

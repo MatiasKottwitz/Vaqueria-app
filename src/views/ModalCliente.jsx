@@ -1,14 +1,15 @@
 import React,{useState,useEffect }from "react";
 import { Modal, Button, Form, Col, Row, Container,} from "react-bootstrap";
 
-const ModalCliente = ({tipoBoton, estado}) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-
+const ModalCliente = ({tipoBoton}) => { 
+  const [show, setShow] = useState(true);
+  const handleClose = () => setShow(false);
+  console.log(tipoBoton); 
     const handleShow = () => {
         setShow(true)
       };
-    /*
+     
+      /*
     <Form>
           <Row>
               <Form.Group className="mb-3" as={Col} lg='3'>
@@ -163,10 +164,8 @@ const ModalCliente = ({tipoBoton, estado}) => {
         </Form>
     */
    if (tipoBoton==="Editar"){
-        console.log("se cargo el modal editar");
     return (
             <>
-            <Button variant="btn btn-warning" onClick={handleShow}><i class="bi bi-pencil-square"></i></Button>
             
           <Modal show={show} size='xl'  onHide={handleClose}>
             <Modal.Header closeButton>
@@ -180,24 +179,20 @@ const ModalCliente = ({tipoBoton, estado}) => {
         </>
       )
    } else if (tipoBoton==="Nuevo"){
-    console.log("se cargo el modal Nuevo");
-return(<>
-        <Button variant="btn btn-success" onClick={handleShow}>
-            <i class="bi bi-plus-lg"></i>
-                Nuevo Cliente
-          </Button>
-            
-          <Modal show={show} size='xl'  onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title> Nuevo Cliente</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            
-            </Modal.Body>
-            
-          </Modal>
-        </>
-)          
+
+          return(<>
+                      
+                    <Modal show={show} size='xl'  onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title> Nuevo Cliente</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                      
+                      </Modal.Body>
+                      
+                    </Modal>
+                  </>
+          )          
    }
     
 }

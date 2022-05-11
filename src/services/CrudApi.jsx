@@ -1,7 +1,7 @@
 import React,{useState,useEffect }from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Datatable from "../components/Datatable";
+import Datatable from "../views/Datatable";
 const CrudApi = ({url}) => {
   //////--------------------------------------------Peticion Get
     const [data, setData] = useState([]);
