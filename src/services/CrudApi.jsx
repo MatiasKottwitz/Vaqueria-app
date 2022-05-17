@@ -11,7 +11,7 @@ const CrudApi = ({url}) => {
      .then((response)=>{
          const data = response.data
          setData(data);
-         console.log(data);
+         //console.log(data);
         })
     }
     useEffect(()=>{

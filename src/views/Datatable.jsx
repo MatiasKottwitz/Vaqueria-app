@@ -1,4 +1,4 @@
-import React,{useState,useEffect }from "react";
+import React,{useState,useEffect, useContext }from "react";
 
 import DataTable from "react-data-table-component";
 
@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
-import { EstadoContext } from "../context/Context";
+import { ElementoContext } from "../context/Context";
 //-------------------------------------------------- Funcion buscar.
 const SearchIt = ({ onChange, value }) => (
   <>
@@ -33,7 +33,6 @@ function Datatable({data}) {
     const [datoSeleccionado, setDatoSeleccionado]=useState({});
     const [estadoEditar, setEstadoEditar]= useState(false);
     const [estadoNuevo, setEstadoNuevo]= useState(false);  
-    
     const paginacionOpciones={
       rowsPerPageText: 'Filas por Pagina',
       rangeSeparatorText: 'de',
@@ -44,6 +43,7 @@ function Datatable({data}) {
     
     const seleccionarDato=(celda)=>{
       setDatoSeleccionado(celda);
+      console.log(datoSeleccionado.razon_social);
     
     }
     //Funcion Utilizada para capurar datos de los input.
@@ -64,7 +64,7 @@ function Datatable({data}) {
 
     const HandleButtonClick = (row) => {
         seleccionarDato(row);
-        console.log(row);
+        //console.log(row);
         setEstadoEditar(true);
         
         //llamar al modal con los datos de la fila seleccionada..
@@ -166,7 +166,7 @@ function Datatable({data}) {
 
     return (
       <>
-      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"} resetEstados={resetEstados}/>}
+      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"} resetEstados={resetEstados} dato={datoSeleccionado}/>}
       {estadoNuevo === true && <ModalCliente tipoBoton={"Nuevo"} resetEstados={resetEstados}/>}
       <div className="table-responsive">
         <Container fluid={'auto'}>
@@ -194,6 +194,7 @@ function Datatable({data}) {
         />
         </Container>
       </div>
+     
       </>
      
   );

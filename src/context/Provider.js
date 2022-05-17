@@ -1,9 +1,11 @@
 import React from 'react'
-import { EstadoContext } from './Context'
-
+import { ElementoContext } from './Context'
+import Datatable from '../views/Datatable'
 const Provider = () => {
   return (
-    <EstadoContext.Provider/>
+    <ElementoContext.Provider value={[]}>
+      <Datatable/>
+    </ElementoContext.Provider>
   )
 }
 

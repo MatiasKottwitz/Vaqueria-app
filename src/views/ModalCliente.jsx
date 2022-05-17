@@ -1,17 +1,20 @@
 import React,{useState,useEffect }from "react";
 import { Modal, Button, Form, Col, Row, Container,} from "react-bootstrap";
+import { ElementoContext } from "../context/Context";
 
-const ModalCliente = ({tipoBoton, resetEstados}) => { 
+
+const ModalCliente =  ({tipoBoton, resetEstados, dato}) => { 
+  
   const [show, setShow] = useState(true);
   const handleClose = () =>{
     setShow(false);
     resetEstados();
   } ;
-  console.log(tipoBoton); 
-    const handleShow = () => {
-        setShow(true)
-      };
-     
+  const handleShow = () => {
+      setShow(true)
+    };
+  
+  const datoSeleccionado = React.useContext(ElementoContext);
       /*
     <Form>
           <Row>
@@ -167,22 +170,24 @@ const ModalCliente = ({tipoBoton, resetEstados}) => {
         </Form>
     */
    if (tipoBoton==="Editar"){
+    console.log(dato);
     return (
             <>
-            
+           
           <Modal show={show} size='xl'  onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title> Actualizar Cliente</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            
+                     
             </Modal.Body>
             
           </Modal>
+        
         </>
       )
    } else if (tipoBoton==="Nuevo"){
-
+    console.log(dato);
           return(<>
                       
                     <Modal show={show} size='xl'  onHide={handleClose}>

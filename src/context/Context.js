@@ -1,2 +1,4 @@
 import React, {createContext} from "react";
-export const EstadoContext = createContext("default");
+const valorPorDefecto=[];
+
+export const ElementoContext = createContext(valorPorDefecto);
