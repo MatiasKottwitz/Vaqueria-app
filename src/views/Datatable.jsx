@@ -8,7 +8,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
 import { ElementoContext } from "../context/Context";
-//-------------------------------------------------- Funcion buscar.
+//-------------------------------------------------- Funcion buscar.lala 
 const SearchIt = ({ onChange, value }) => (
   <>
     <div className="input-group input-group-xl w-50">

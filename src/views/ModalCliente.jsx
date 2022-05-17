@@ -195,7 +195,7 @@ const ModalCliente =  ({tipoBoton, resetEstados, dato}) => {
                         <Modal.Title> Nuevo Cliente</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                      
+                      <h1>Hola mundo</h1>
                       </Modal.Body>
                       
                     </Modal>
