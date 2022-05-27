@@ -1,11 +1,11 @@
 import React,{useState, useContext }from "react";
 import { Modal, Button, Form, Col, Row, Container,} from "react-bootstrap";
-import { UserContext } from "../context/Context";
+import { DataContext, DatoContext } from "../context/Context";
 
 
-const ModalCliente =  ({tipoBoton, resetEstados, dato}) => { 
-  const {user , setUser} = useContext(UserContext);
-  const [datoSeleccionado, setDatoSeleccionado]=useState({});
+const ModalCliente =  ({tipoBoton, resetEstados}) => { 
+  const {user , setUser} = useContext(DataContext);
+  const {dato, setDato}=useContext(DatoContext);
   const [show, setShow] = useState(true);
   const handleClose = () =>{
     setShow(false);
@@ -18,11 +18,11 @@ const ModalCliente =  ({tipoBoton, resetEstados, dato}) => {
     
   const handleChange=e=>{
       const {name, value}=e.target;
-      setDatoSeleccionado(prevState=>({
+      setDato(prevState=>({
           ...prevState,
           [name]:value
       }));
-      console.log(datoSeleccionado);
+      console.log(dato);
   }  
   
       /*

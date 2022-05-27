@@ -2,9 +2,9 @@ import React,{useState,useEffect,useContext }from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Datatable from "../views/Datatable";
-import { UserContext } from "../context/Context";
+import { DataContext } from "../context/Context";
 const CrudApi = ({url}) => {
-  const {data , setData} = useContext(UserContext);
+const {data , setData} = useContext(DataContext);
 
   //////--------------------------------------------Peticion Get
     

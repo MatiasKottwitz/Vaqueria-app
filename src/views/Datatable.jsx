@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
-import { UserContext } from "../context/Context";
+import { DataContext,DatoContext } from "../context/Context";
 
 import '../styles/styles.css'
 //-------------------------------------------------- Funcion buscar.lala 
@@ -30,9 +30,9 @@ const SearchIt = ({ onChange, value }) => (
   
 );
 function Datatable() {
-    const {data} = useContext(UserContext);    
+    const {data} = useContext(DataContext);//datos provenientes del context.
+    const {dato,setDato} = useContext(DatoContext);    
     const [filtro, setFiltro] = useState('');
-    const [datoSeleccionado, setDatoSeleccionado]=useState({});
     const [estadoEditar, setEstadoEditar]= useState(false);
     const [estadoNuevo, setEstadoNuevo]= useState(false);  
     const paginacionOpciones={
@@ -44,18 +44,18 @@ function Datatable() {
     
     
     const seleccionarDato=(celda)=>{
-      setDatoSeleccionado(celda);
-      console.log(datoSeleccionado.razon_social);
+      setDato(celda);
+      console.log(dato.razon_social);
     
     }
     //Funcion Utilizada para capurar datos de los input.
     const handleChange=e=>{
         const {name, value}=e.target;
-        setDatoSeleccionado(prevState=>({
+        setDato(prevState=>({
             ...prevState,
             [name]:value
         }));
-        console.log(datoSeleccionado);
+        console.log(dato);
     }
     
   
@@ -168,7 +168,7 @@ function Datatable() {
 
     return (
       <>
-      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"} resetEstados={resetEstados} dato={datoSeleccionado}/>}
+      {estadoEditar === true && <ModalCliente tipoBoton={"Editar"} resetEstados={resetEstados}/>}
       {estadoNuevo === true && <ModalCliente tipoBoton={"Nuevo"} resetEstados={resetEstados}/>}
       <div className="table-responsive">
         <Container fluid={'auto'}>
