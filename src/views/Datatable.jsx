@@ -7,7 +7,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, NavLink } from "react-router-dom";
 import ModalCliente from "../views/ModalCliente";
-import { ElementoContext } from "../context/Context";
+import { UserContext } from "../context/Context";
+
+import '../styles/styles.css'
 //-------------------------------------------------- Funcion buscar.lala 
 const SearchIt = ({ onChange, value }) => (
   <>
@@ -27,8 +29,8 @@ const SearchIt = ({ onChange, value }) => (
   
   
 );
-function Datatable({data}) {
-    
+function Datatable() {
+    const {data} = useContext(UserContext);    
     const [filtro, setFiltro] = useState('');
     const [datoSeleccionado, setDatoSeleccionado]=useState({});
     const [estadoEditar, setEstadoEditar]= useState(false);

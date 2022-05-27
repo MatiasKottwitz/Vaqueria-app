@@ -1,10 +1,12 @@
-import React,{useState,useEffect }from "react";
+import React,{useState,useEffect,useContext }from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Datatable from "../views/Datatable";
+import { UserContext } from "../context/Context";
 const CrudApi = ({url}) => {
+  const {data , setData} = useContext(UserContext);
+
   //////--------------------------------------------Peticion Get
-    const [data, setData] = useState([]);
     
     const getData = async()=>{
      await axios.get(url)
@@ -97,7 +99,7 @@ const eliminarCliente =()=>{
 }
 */
 return(
-  <Datatable data={data}/>
+  <Datatable/>
 ) 
 }
 export default CrudApi;

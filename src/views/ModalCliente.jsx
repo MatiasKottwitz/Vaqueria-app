@@ -1,9 +1,10 @@
-import React,{useState,useEffect }from "react";
+import React,{useState, useContext }from "react";
 import { Modal, Button, Form, Col, Row, Container,} from "react-bootstrap";
-import { ElementoContext } from "../context/Context";
+import { UserContext } from "../context/Context";
 
 
 const ModalCliente =  ({tipoBoton, resetEstados, dato}) => { 
+  const {user , setUser} = useContext(UserContext);
   const [datoSeleccionado, setDatoSeleccionado]=useState({});
   const [show, setShow] = useState(true);
   const handleClose = () =>{
@@ -348,7 +349,7 @@ const ModalCliente =  ({tipoBoton, resetEstados, dato}) => {
         </>
       )
    } else if (tipoBoton==="Nuevo"){
-    console.log(dato);
+    console.log(user);
           return(<>
                       
                     <Modal show={show} size='xl'  onHide={handleClose}>
@@ -356,7 +357,10 @@ const ModalCliente =  ({tipoBoton, resetEstados, dato}) => {
                         <Modal.Title> Nuevo Cliente</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                      <h1>Hola mundo</h1>
+                      {JSON.stringify(user,null,3)}
+                      <button className="btn btn-primary"
+                        onClick={()=> setUser('prueba')}
+                      >prueba</button>
                       </Modal.Body>
                       
                     </Modal>
